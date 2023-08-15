@@ -57,3 +57,12 @@ class Matrix:
         assert self.shape() == other.shape(), "Different shape of the matrix"
         return Matrix(
             [[a - b for a, b in zip(self.row_vector(i), other.row_vector(i))] for i in range(0, self.row_num())])
+
+    def __mul__(self, k):
+        return Matrix([e * k for e in self.row_vector(i)] for i in range(self.row_num()))
+
+    def __rmul__(self, k):
+        return self * k
+
+    def __truediv__(self, k):
+        return Matrix([[e / k for e in self.row_vector(i)] for i in range(self.row_num())])

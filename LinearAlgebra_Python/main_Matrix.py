@@ -10,4 +10,7 @@ if __name__ == '__main__':
     mar2 = Matrix([[10, 20, 30], [40, 50, 60], [70, 80, 90]])
     print(mar + mar2)
     print(mar - mar2)
-    print()
+    print(mar*2)
+    print(2*mar)
+    print(mar/2)
+
