@@ -119,5 +119,6 @@ class Vector:
         return self / self.norm()
 
     def dot_mul(self, other):
+        # 点乘： x1x2+y1y2
         assert len(self) == len(other), "not the same length vector"
         return sum(a * b for a, b in zip(self, other))
