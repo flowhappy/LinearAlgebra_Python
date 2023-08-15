@@ -89,5 +89,6 @@ class Matrix:
         矩阵转置
         """
         return Matrix([
-            [e for e in self.col_vector(i)] for i in range(self.row_num())
+            [e for e in self.col_vector(i)] for i in range(self.col_num())
         ])
+
