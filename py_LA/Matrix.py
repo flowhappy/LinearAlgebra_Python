@@ -83,3 +83,11 @@ class Matrix:
             assert self.col_num() == other.row_num(), 'different row of vector and col of matrix'
             return Matrix([[self.row_vector(i).dot_mul(other.col_vector(j)) for j in range(other.col_num())] for i in
                            range(self.row_num())])
+
+    def T(self):
+        """
+        矩阵转置
+        """
+        return Matrix([
+            [e for e in self.col_vector(i)] for i in range(self.row_num())
+        ])

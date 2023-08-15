@@ -21,3 +21,6 @@ if __name__ == '__main__':
 
     P = Matrix([[0, 4, 5], [0, 0, 3]])
     print(T.dot_mul(P))
+
+    print(mar)
+    print(mar.T())
