@@ -47,3 +47,13 @@ class Matrix:
     def col_vector(self, index):
         # 返回第index列的元素
         return Vector(row[index] for row in self._values)
+
+    def __add__(self, other):
+        assert self.shape() == other.shape(), "Different shape of the matrix"
+        return Matrix(
+            [[a + b for a, b in zip(self.row_vector(i), other.row_vector(i))] for i in range(0, self.row_num())])
+
+    def __sub__(self, other):
+        assert self.shape() == other.shape(), "Different shape of the matrix"
+        return Matrix(
+            [[a - b for a, b in zip(self.row_vector(i), other.row_vector(i))] for i in range(0, self.row_num())])

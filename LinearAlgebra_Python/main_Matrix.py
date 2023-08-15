@@ -7,3 +7,6 @@ if __name__ == '__main__':
     print(mar.size())
     print(mar[0, 1])
     print(mar.row_vector(0))
+    mar2 = Matrix([[10, 20, 30], [40, 50, 60], [70, 80, 90]])
+    print(mar + mar2)
+    print(mar - mar2)
