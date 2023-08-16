@@ -24,3 +24,6 @@ if __name__ == '__main__':
 
     print(mar)
     print(mar.T())
+
+    print(Matrix.identity(2))
+    print(T.dot_mul(Matrix.identity(2)))

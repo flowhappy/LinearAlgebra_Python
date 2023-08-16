@@ -92,3 +92,10 @@ class Matrix:
             [e for e in self.col_vector(i)] for i in range(self.col_num())
         ])
 
+    @classmethod
+    def identity(cls, n):
+        # 返回一个n*n的矩阵
+        m = [[0] * n for _ in range(n)]
+        for i in range(0, n):
+            m[i][i] = 1
+        return cls(m)
