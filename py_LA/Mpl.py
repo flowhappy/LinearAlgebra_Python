@@ -2,6 +2,7 @@ from py_LA.Matrix import Matrix
 import math
 
 
+# 矩阵变换库
 class MplMtr:
     """
         矩阵变换类
