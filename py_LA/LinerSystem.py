@@ -45,6 +45,7 @@ class LinerSystem:
         i, k = 0, 0
 
         while i < self._m and k < self._n:
+            print(i)
             """
             为了避免[0][0]元素是零，所以直接选择第一列元素最大的这一行，和第一行交换
             看Ab[i][k]是否可以是主元
@@ -60,8 +61,8 @@ class LinerSystem:
                 # 至此已经确定主元，现在将主元所在行以下的所有行的主元所在列的元素化为0
                 for j in range(i + 1, self._m):
                     self.Ab[j] = self.Ab[j] - self.Ab[i] * self.Ab[j][k]
-                    self.pivots.append(k)
-                    i += 1
+                self.pivots.append(k)
+                i += 1
 
     def _backward(self):
         n = len(self.pivots)
