@@ -1,4 +1,5 @@
 from .Vector import Vector
+from ._global import ZERO
 
 
 class LinerSystem:
@@ -10,7 +11,8 @@ class LinerSystem:
         assert A.row_num() == len(b), "row number of A must be equal to the length of b"
         self._m = A.row_num()
         self._n = A.col_num()
-        assert self._m == self._n, "row_num must be equal to col_num"  # TODO: no this restriction
+        self.pivots = []
+
         """
         下面是实现增广矩阵的代码
             增广矩阵就是 系数矩阵+结果列向量
@@ -23,43 +25,50 @@ class LinerSystem:
             A.row_vector(i).underlying_list() + [b[i]]
         ) for i in range(self._m)]
 
-    def _max_row(self, index, n):
+    def _max_row(self, index_i, index_j, n):
         """
         从第i行到第n行
         """
-        best, ret = self.Ab[index][index], index
+        best, ret = self.Ab[index_i][index_j], index_i
         """
         这里的self.Ab[i][index]就是取固定这一列，i进行行的递增变化
         为什么不直接使用[i][0]呢？
         因为不仅仅是第一次（第一行）需要选择最大行，往后确定每一行的主元的时候都要确定
         """
-        for i in range(index + 1, n):
-            if self.Ab[i][index] > best:
+        for i in range(index_i + 1, n):
+            if self.Ab[i][index_j] > best:
                 # 此时，i是最大元素所在的行下标
-                best, ret = self.Ab[i][index], i
+                best, ret = self.Ab[i][index_j], i
         return ret
 
     def _forward(self):
-        n = self._m
-        for i in range(n):
+        i, k = 0, 0
+
+        while i < self._m and k < self._n:
             """
-            Ab[i][i]为主元
             为了避免[0][0]元素是零，所以直接选择第一列元素最大的这一行，和第一行交换
+            看Ab[i][k]是否可以是主元
             """
-            max_row = self._max_row(i, n)
+            max_row = self._max_row(i, k, self._m)
             # 交换
             self.Ab[i], self.Ab[max_row] = self.Ab[max_row], self.Ab[i]
-            # 将这一行的主元化为1，就是这一行除以主元的值
-            self.Ab[i] = self.Ab[i] / self.Ab[i][i]  # todo: ab[i][i] == 0
-            # 至此已经确定主元，现在将主元所在行以下的所有行的主元所在列的元素化为0
-            for j in range(i + 1, n):
-                self.Ab[j] = self.Ab[j] - self.Ab[i] * self.Ab[j][i]
+            if self.Ab[i][k] < ZERO:
+                k += 1
+            else:
+                # 将这一行的主元化为1，就是这一行除以主元的值
+                self.Ab[i] = self.Ab[i] / self.Ab[i][k]
+                # 至此已经确定主元，现在将主元所在行以下的所有行的主元所在列的元素化为0
+                for j in range(i + 1, self._m):
+                    self.Ab[j] = self.Ab[j] - self.Ab[i] * self.Ab[j][k]
+                    self.pivots.append(k)
+                    i += 1
 
     def _backward(self):
-        n = self._m
+        n = len(self.pivots)
         for i in range(n - 1, -1, -1):
+            k = self.pivots[i]
             for j in range(i - 1, -1, -1):
-                self.Ab[j] = self.Ab[j] - self.Ab[i] * self.Ab[j][i]
+                self.Ab[j] = self.Ab[j] - self.Ab[i] * self.Ab[j][k]
 
     def gauss_jordan_elimination(self):
         self._forward()
