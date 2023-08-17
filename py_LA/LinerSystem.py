@@ -1,5 +1,4 @@
-from Matrix import Matrix
-from Vector import Vector
+from .Vector import Vector
 
 
 class LinerSystem:
@@ -8,7 +7,7 @@ class LinerSystem:
         A: 系数矩阵
         b: 结果向量
         """
-        assert A.row_num == len(b), "row number of A must be equal to the length of b"
+        assert A.row_num() == len(b), "row number of A must be equal to the length of b"
         self._m = A.row_num()
         self._n = A.col_num()
         assert self._m == self._n, "row_num must be equal to col_num"  # TODO: no this restriction
@@ -21,7 +20,7 @@ class LinerSystem:
             再通过遍历来获得完整的增广矩阵
         """
         self.Ab = [Vector(
-            A.row_vector(i).underlying_list + b[i]
+            A.row_vector(i).underlying_list() + [b[i]]
         ) for i in range(self._m)]
 
     def _max_row(self, index, n):

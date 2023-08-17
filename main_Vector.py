@@ -4,7 +4,7 @@ if __name__ == '__main__':
     vec = Vector([2, 5])
 
     print(vec)
-
+    print(type(vec))
     print(vec.__len__())
 
     print(vec.__getitem__(1))
