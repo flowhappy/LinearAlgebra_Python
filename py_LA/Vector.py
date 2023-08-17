@@ -122,3 +122,9 @@ class Vector:
         # 点乘： x1x2+y1y2
         assert len(self) == len(other), "not the same length vector"
         return sum(a * b for a, b in zip(self, other))
+
+    def underlying_list(self):
+        """
+        返回底层列表
+        """
+        return self._values
