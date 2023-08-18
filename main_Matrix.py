@@ -17,13 +17,13 @@ if __name__ == '__main__':
 
     T = Matrix([[1.5, 0], [0, 2]])
     p = Vector([5, 3])
-    print(T.dot_mul(p))
+    print(T.dot(p))
 
     P = Matrix([[0, 4, 5], [0, 0, 3]])
-    print(T.dot_mul(P))
+    print(T.dot(P))
 
     print(mar)
     print(mar.T())
 
     print(Matrix.identity(2))
-    print(T.dot_mul(Matrix.identity(2)))
+    print(T.dot(Matrix.identity(2)))

@@ -28,4 +28,4 @@ if __name__ == '__main__':
 
     print(vec.normalize().norm())
 
-    print(vec.dot_mul(vec2))
+    print(vec.dot(vec2))
