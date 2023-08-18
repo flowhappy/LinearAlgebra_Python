@@ -67,21 +67,21 @@ class Matrix:
     def __truediv__(self, k):
         return Matrix([[e / k for e in self.row_vector(i)] for i in range(self.row_num())])
 
-    def dot_mul(self, other):
+    def dot(self, other):
 
         if isinstance(other, Vector):
             """
             矩阵和向量的乘法
             """
             assert self.col_num() == len(other), 'different len of vector and col of matrix'
-            return Vector([self.row_vector(i).dot_mul(other) for i in range(self.row_num())])
+            return Vector([self.row_vector(i).dot(other) for i in range(self.row_num())])
 
         if isinstance(other, Matrix):
             """
             矩阵与矩阵的乘法，将矩阵1的第一行和矩阵二的第一列作向量乘法点乘
             """
             assert self.col_num() == other.row_num(), 'different row of vector and col of matrix'
-            return Matrix([[self.row_vector(i).dot_mul(other.col_vector(j)) for j in range(other.col_num())] for i in
+            return Matrix([[self.row_vector(i).dot(other.col_vector(j)) for j in range(other.col_num())] for i in
                            range(self.row_num())])
 
     def T(self):
@@ -99,3 +99,5 @@ class Matrix:
         for i in range(0, n):
             m[i][i] = 1
         return cls(m)
+
+    __len__ = row_num
