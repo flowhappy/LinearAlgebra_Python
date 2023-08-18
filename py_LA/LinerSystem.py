@@ -45,7 +45,6 @@ class LinerSystem:
         i, k = 0, 0
 
         while i < self._m and k < self._n:
-            print(i)
             """
             为了避免[0][0]元素是零，所以直接选择第一列元素最大的这一行，和第一行交换
             看Ab[i][k]是否可以是主元
@@ -54,6 +53,7 @@ class LinerSystem:
             # 交换
             self.Ab[i], self.Ab[max_row] = self.Ab[max_row], self.Ab[i]
             if self.Ab[i][k] < ZERO:
+                # 当这一个主元为0时，就在这一行的下一列找
                 k += 1
             else:
                 # 将这一行的主元化为1，就是这一行除以主元的值
@@ -72,8 +72,22 @@ class LinerSystem:
                 self.Ab[j] = self.Ab[j] - self.Ab[i] * self.Ab[j][k]
 
     def gauss_jordan_elimination(self):
+        """
+        如果有解，返回true，如果无解返回false
+        """
         self._forward()
         self._backward()
+        """
+        self.pivots中记录的是所有主元的列下标，len(self.pivots)就是所有非零行的数量
+        从len(self.pivots)到self._m都是为零的行
+        因为增广矩阵的行最简形式，为零行都在下面
+        现在只要判断为零行的最后一个元素是不是零，如果不是零，就无解
+        """
+        for i in range(len(self.pivots),self._m):
+            if not self.Ab[i][-1]<ZERO:
+                return False
+            else:
+                return True
 
     def fancy_print(self):
         for i in range(self._m):
