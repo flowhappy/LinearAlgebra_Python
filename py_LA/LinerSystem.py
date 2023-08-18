@@ -1,3 +1,4 @@
+from .Matrix import Matrix
 from .Vector import Vector
 from ._global import ZERO
 
@@ -9,21 +10,32 @@ class LinerSystem:
         b: 结果向量
         """
         assert A.row_num() == len(b), "row number of A must be equal to the length of b"
+
         self._m = A.row_num()
         self._n = A.col_num()
-        self.pivots = []
 
-        """
-        下面是实现增广矩阵的代码
-            增广矩阵就是 系数矩阵+结果列向量
-            使用向量类的underlying_list方法返回该向量的原数据（数据类型是列表）
-            再直接使用➕来链接结果列向量
-            这样实现一行的增广矩阵
-            再通过遍历来获得完整的增广矩阵
-        """
-        self.Ab = [Vector(
-            A.row_vector(i).underlying_list() + [b[i]]
-        ) for i in range(self._m)]
+        if isinstance(b, Vector):
+            """
+                    下面是实现增广矩阵的代码
+                        增广矩阵就是 系数矩阵+结果列向量
+                        使用向量类的underlying_list方法返回该向量的原数据（数据类型是列表）
+                        再直接使用➕来链接结果列向量
+                        这样实现一行的增广矩阵
+                        再通过遍历来获得完整的增广矩阵
+                    """
+            self.Ab = [Vector(
+                A.row_vector(i).underlying_list() + [b[i]]
+            ) for i in range(self._m)]
+
+        if isinstance(b, Matrix):
+            """
+            如果是矩阵，就在每一行加上该矩阵的某行
+            """
+            self.Ab = [Vector(
+                A.row_vector(i).underlying_list() + b.row_vector(i).underlying_list()
+            ) for i in range(self._m)]
+
+        self.pivots = []
 
     def _max_row(self, index_i, index_j, n):
         """
@@ -83,13 +95,43 @@ class LinerSystem:
         因为增广矩阵的行最简形式，为零行都在下面
         现在只要判断为零行的最后一个元素是不是零，如果不是零，就无解
         """
-        for i in range(len(self.pivots),self._m):
-            if not self.Ab[i][-1]<ZERO:
+        for i in range(len(self.pivots), self._m):
+            if not self.Ab[i][-1] < ZERO:
                 return False
             else:
                 return True
 
     def fancy_print(self):
+        """
+        打印结果矩阵
+        """
         for i in range(self._m):
             print(" ".join(str(self.Ab[i][j]) for j in range(self._n)), end=" ")
             print("|{}".format(self.Ab[i][-1]))
+
+
+def inv(A):
+    """
+        求矩阵A的逆
+        1. 如果不是方阵，就没有逆
+        2. 创建一个线性系统，传入系数矩阵和n*n单位矩阵
+        3. 调用高斯约旦消元法，得到行最简形式
+        4. 如果有结果，最右边的就是所求的A的逆矩阵
+    """
+    if A.col_num() != A.row_num():
+        return None
+
+    n = A.row_num()
+    # 下方传入了一个n*n的单位矩阵
+    ls = LinerSystem(A, Matrix.identity(n))
+    print(ls.gauss_jordan_elimination())
+    if not ls.gauss_jordan_elimination():
+        return None
+
+    """
+    从ls这个对象中取出Ab这个元素
+    Ab从第0到第n-1列是行最简形式
+        第n到第2n列是逆矩阵（因为单位矩阵列和系数矩阵行相同）
+    """
+    invA = [[row[i] for i in range(n, n * 2)] for row in ls.Ab]
+    return Matrix(invA)
