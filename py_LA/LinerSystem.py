@@ -97,7 +97,7 @@ def rank(A):
 
 
 def basis(A):
-    # 求行空间的 基
+    # 求行空间的基
     # 新建线性系统对象
     ls = LinerSystem(A)
     # 对该线性系统进行高斯约旦消元
