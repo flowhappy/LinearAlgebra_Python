@@ -3,8 +3,10 @@ from py_LA.Vector import Vector
 
 class Matrix:
     def __init__(self, list2d):
-        # 将二维数组的每一行取出来，再复制
-        self._values = [row[:] for row in list2d]
+        if isinstance(list2d[0], list):
+            self._values = [row[:] for row in list2d]
+        elif isinstance(list2d[0], Vector):
+            self._values = [row.underlying_list() for row in list2d]
 
     def __repr__(self):
         return "Matrix({})".format(self._values)
