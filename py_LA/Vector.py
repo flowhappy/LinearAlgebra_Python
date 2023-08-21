@@ -1,5 +1,5 @@
 import math
-from ._global import ZERO
+from ._global import ZERO, is_equal
 
 
 class Vector:
@@ -128,3 +128,12 @@ class Vector:
         返回底层列表
         """
         return self._values
+
+    def __eq__(self, other):
+        other_list = other.underlying_list()
+        if len(self._values) != len(other_list):
+            return False
+        return all(is_equal(a, b) for a, b in zip(self._values, other_list))
+
+    def __neq__(self, other):
+        return not (self == other)

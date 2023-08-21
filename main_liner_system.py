@@ -1,7 +1,6 @@
 from py_LA.Matrix import Matrix
 from py_LA.Vector import Vector
-from py_LA.LinerSystem import LinerSystem
-from py_LA.LinerSystem import inv
+from py_LA.LinerSystem import inv, rank, LinerSystem, basis
 
 if __name__ == "__main__":
 
@@ -78,3 +77,7 @@ if __name__ == "__main__":
     print(invA)
     print(A.dot(invA))
     print(invA.dot(A))
+
+    print(rank(A8))
+
+    print(basis(Matrix([[2, 0, 0], [-1, 0, 0], [0, 0, 1]])))

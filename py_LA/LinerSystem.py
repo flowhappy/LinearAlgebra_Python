@@ -5,12 +5,13 @@ from ._global import is_zero
 
 class LinerSystem:
 
-    def __init__(self, A, b):
+    def __init__(self, A, b=None):
 
-        assert A.row_num() == len(b), "row number of A must be equal to the length of b"
+        assert b is None or A.row_num() == len(b), "row number of A must be equal to the length of b"
         self._m = A.row_num()
         self._n = A.col_num()
-
+        if b is None:
+            self.Ab = [A.row_vector(i) for i in range(A.row_num())]
         if isinstance(b, Vector):
             self.Ab = [Vector(A.row_vector(i).underlying_list() + [b[i]])
                        for i in range(self._m)]
@@ -53,6 +54,9 @@ class LinerSystem:
             # Ab[i][k]为主元
             for j in range(i - 1, -1, -1):
                 self.Ab[j] = self.Ab[j] - self.Ab[j][k] * self.Ab[i]
+            """
+            此时Ab保存的是行最简形式
+            """
 
     def gauss_jordan_elimination(self):
         """如果有解，返回True；如果没有解，返回False"""
@@ -82,3 +86,23 @@ def inv(A):
 
     invA = [[row[i] for i in range(n, 2 * n)] for row in ls.Ab]
     return Matrix(invA)
+
+
+def rank(A):
+    """矩阵的秩"""
+    ls = LinerSystem(A)
+    ls.gauss_jordan_elimination()
+    zero = Vector.zero(A.col_num())
+    return sum([row != zero for row in ls.Ab])
+
+
+def basis(A):
+    # 求行空间的基
+    # 新建线性系统对象
+    ls = LinerSystem(A)
+    # 对该线性系统进行高斯约旦消元
+    ls.gauss_jordan_elimination()
+    # 新建一个零行，做对比用
+    zero = Vector.zero(A.col_num())
+    # 返回所有非零行组成的矩阵
+    return Matrix([row for row in ls.Ab if row != zero])
