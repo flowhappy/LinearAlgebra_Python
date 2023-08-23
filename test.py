@@ -1,5 +1,3 @@
-lista = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-listb = filter(lambda x: x - 2 , lista)
-
-print(list(listb))
+lst = [2,2,2]
+lst2 = [2,2,2]
+print(lst2==lst)
