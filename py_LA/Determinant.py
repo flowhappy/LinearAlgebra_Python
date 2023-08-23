@@ -1,7 +1,6 @@
 class Determinant:
 
     def __init__(self, matrix):
-        assert len(matrix) == len(matrix[0]), "must be a square"
         self._values = matrix
         self._row_num = len(matrix)
         self._flag = 1
@@ -10,6 +9,7 @@ class Determinant:
         """
         判断有没有相同的行
         :return: 返回相同行数的数量
+        这里如果使用常规的双重循环效率更高，因为计算到第二个就可以返回了，但是这个写法比较酷
         """
         return sum(
             [self._values[i] == self._values[j] for i in range(self._row_num - 1) for j in range(i + 1, self._row_num)]
