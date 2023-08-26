@@ -5,7 +5,6 @@ from py_LA.Matrix import Matrix
 
 
 def diagonalize(A):
-
     assert A.ndim == 2
     assert A.shape[0] == A.shape[1]
 
@@ -23,7 +22,6 @@ def diagonalize(A):
 
 
 if __name__ == "__main__":
-
     A1 = np.array([[4, -2],
                    [1, 1]])
     P1, D1, Pinv1 = diagonalize(A1)
@@ -32,7 +30,6 @@ if __name__ == "__main__":
     print(Pinv1)
     print(P1.dot(D1).dot(Pinv1))
     print()
-
 
     A2 = np.array([[3, 1],
                    [0, 3]])
